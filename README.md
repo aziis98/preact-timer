@@ -1,6 +1,6 @@
 # Preact Timer App
 
-A simple app made to test Preact without a build step. Every thing is saved to `localStorage`.
+A simple app made to test Preact without a build step. Everything is saved to `localStorage`.
 
 ![screenshot](screenshot-1.png)
 
