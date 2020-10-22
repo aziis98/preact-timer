@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans&display=swap');
 
 * {
     box-sizing: border-box;
@@ -10,6 +11,9 @@ html, body {
     min-height: 100vh;
     color: #333;
     position: relative;
+
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 16px;
 }
 
 .app {
@@ -46,7 +50,7 @@ html, body {
     transform: translate(-50%, 0);
 
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 600;
     color: #888;
 }
 
@@ -59,7 +63,7 @@ html, body {
     transform: translate(-50%, 0);
 
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 600;
     color: #888;
 }
 
@@ -72,7 +76,7 @@ html, body {
     transform: translate(-50%, 0);
 
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 600;
     color: #888;
 }
 
@@ -97,10 +101,13 @@ button {
     border-radius: 4px;
     padding: 0.5rem;
 
+    min-width: 50px;
+    
     color: #555;
 }
 
 button.small {
+    min-width: 25px;
     padding: 0.3rem 0.3rem 0.1rem 0.3rem;
 }
 

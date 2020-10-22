@@ -1,5 +1,12 @@
-
 import { html, Component, render } from 'https://unpkg.com/htm/preact/standalone.module.js';
+
+const prefetch = [
+    'https://img.icons8.com/ios-filled/50/555555/pause.png',
+    'https://img.icons8.com/ios-filled/50/555555/play.png',
+    'https://img.icons8.com/ios-filled/25/555555/stop.png',
+    'https://img.icons8.com/small/25/555555/save.png',
+    'https://img.icons8.com/small/32/555555/delete-forever.png',
+].map(imageSrc => new Image().src = imageSrc);
 
 class App extends Component {
 
@@ -132,7 +139,7 @@ class App extends Component {
                     <button onClick=${()=> this.toggleTimer()}>
                         ${
                             this.isTimerRunning() ? 
-                            html`<img src="https://img.icons8.com/ios-filled/50/555555/pause.png"/>` 
+                            html`<img src="https://img.icons8.com/ios-filled/50/555555/pause.png"/>`
                             : 
                             html`<img src="https://img.icons8.com/ios-filled/50/555555/play.png"/>`
                         }
