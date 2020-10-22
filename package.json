@@ -1,0 +1,13 @@
+{
+  "name": "timer-1",
+  "version": "1.0.0",
+  "description": "Preact Timer App",
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  },
+  "scripts": {
+    "serve": "live-server dist"
+  },
+  "author": "aziis98",
+  "license": "MIT"
+}

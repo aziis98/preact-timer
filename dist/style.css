@@ -1,0 +1,133 @@
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+html, body {
+    width: 100%;
+    min-height: 100vh;
+    color: #333;
+    position: relative;
+}
+
+.app {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 25vmin 0 10%;
+}
+
+.clock {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: calc(max(7vmin, 42px));
+    white-space: pre;
+
+    margin-right: 1rem;
+}
+
+.clock.small {
+    font-size: 28px;
+}
+
+.clock > * {
+    position: relative;
+}
+
+.clock:not(.small) .seconds::before {
+    content: 's';
+
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    font-size: 18px;
+    font-weight: bold;
+    color: #888;
+}
+
+.clock:not(.small) .minutes::before {
+    content: 'm';
+
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    font-size: 18px;
+    font-weight: bold;
+    color: #888;
+}
+
+.clock:not(.small) .hours::before {
+    content: 'h';
+
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    font-size: 18px;
+    font-weight: bold;
+    color: #888;
+}
+
+.flex-h {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.flex-v {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+button {
+    cursor: pointer;
+
+    background: #ddd;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem;
+
+    color: #555;
+}
+
+button.small {
+    padding: 0.3rem 0.3rem 0.1rem 0.3rem;
+}
+
+.saved-list {
+    color: #444;
+}
+
+.save-item button {
+    visibility: hidden;
+}
+
+.save-item:hover button {
+    visibility: visible;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.5rem;    
+}
+
+span.spacer {
+    display: inline-block;
+    width: 25px;
+}
