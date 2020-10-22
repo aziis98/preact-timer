@@ -4,6 +4,8 @@ A simple app made to test Preact without a build step. Everything is saved to `l
 
 ![screenshot](screenshot-1.png)
 
+This is also aviable at <https://timer.aziis98.vercel.app/> (yep also testing Vercel)
+
 ## Description
 
 This uses <https://github.com/developit/htm> with <https://preactjs.com/> by the import

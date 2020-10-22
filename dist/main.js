@@ -110,7 +110,7 @@ class App extends Component {
 
         return html`
         <div class="app">
-            <div class="flex-h">
+            <div class="watchface flex-h">
                 <div class="clock">
                     <span class="hours">
                         ${hours}
@@ -125,7 +125,7 @@ class App extends Component {
                     </span>
                     .
                     <span class="millis">
-                        ${(millis + '').padEnd(3)}
+                        ${(millis + '').padEnd(3, '0')}
                     </span>
                 </div>
                 <div class="flex-h">
