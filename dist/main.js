@@ -10,8 +10,8 @@ import {
 const STORAGE_NAMESPACE = 'aziis98/timer@1';
 
 const prefetch = [
-    'https://img.icons8.com/ios-filled/50/555555/pause.png',
-    'https://img.icons8.com/ios-filled/50/555555/play.png',
+    'https://img.icons8.com/ios-filled/100/555555/pause.png',
+    'https://img.icons8.com/ios-filled/100/555555/play.png',
     'https://img.icons8.com/ios-filled/25/555555/stop.png',
     'https://img.icons8.com/small/25/555555/save.png',
     'https://img.icons8.com/small/32/555555/delete-forever.png',
@@ -158,16 +158,16 @@ const App = () => {
                 <button onClick=${toggleTimer}>
                     ${
                         isTimerRunning() ? 
-                        html`<img src="https://img.icons8.com/ios-filled/50/555555/pause.png"/>`
+                        html`<img src="https://img.icons8.com/ios-filled/100/555555/pause.png"/>`
                         : 
-                        html`<img src="https://img.icons8.com/ios-filled/50/555555/play.png"/>`
+                        html`<img src="https://img.icons8.com/ios-filled/100/555555/play.png"/>`
                     }
                 </button>
                 <button class="small" onClick=${resetTimer}>
-                    <img src="https://img.icons8.com/ios-filled/25/555555/stop.png"/>
+                    <img src="https://img.icons8.com/ios-filled/50/555555/stop.png"/>
                 </button>
                 <button class="small" onClick=${() => addSaved(timePassed)}>
-                    <img src="https://img.icons8.com/small/25/555555/save.png"/>
+                    <img src="https://img.icons8.com/small/50/555555/save.png"/>
                 </button>
             </div>
         </div>
