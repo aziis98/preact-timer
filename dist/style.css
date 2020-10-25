@@ -110,6 +110,7 @@ button.small img {
 
 .saved-list {
     color: #444;
+    flex-direction: column-reverse;
 }
 
 .save-item button {
