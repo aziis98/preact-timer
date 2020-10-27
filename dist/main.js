@@ -7,7 +7,7 @@ import {
     useCallback
 } from 'https://unpkg.com/htm/preact/standalone.module.js'
 
-const STORAGE_NAMESPACE = 'aziis98/timer@1';
+const STORAGE_NAMESPACE = 'aziis98/timer@1'
 
 const prefetch = [
     'https://img.icons8.com/ios-filled/100/555555/pause.png',
@@ -105,12 +105,18 @@ const useSaveList = () => {
     ]
 }
 
-const TimeFace = ({ datetime }) => {
+const projectTime = datetime => {
     const time = datetime.getTime()
-    const millis = time % 1000
-    const seconds = Math.floor(time / 1000) % 60
-    const minutes = Math.floor(time / (60 * 1000)) % 60
     const hours = Math.floor(time / (60 * 60 * 1000)) % 60
+    const minutes = Math.floor(time / (60 * 1000)) % 60
+    const seconds = Math.floor(time / 1000) % 60
+    const millis = time % 1000
+
+    return [hours, minutes, seconds, millis]
+}
+
+const TimeFace = ({ datetime }) => {
+    const [hours, minutes, seconds, millis] = projectTime(datetime)
 
     return html`
         <span class="hours">
@@ -138,7 +144,24 @@ const App = () => {
     const [SaveList, addSaved] = useSaveList()
 
     const updateTimePassed = useCallback(() => {
-        setTimePassed(getTimerCurrentValue())
+        const datetime = getTimerCurrentValue()
+
+        if (isTimerRunning()) {
+            const [hours, minutes, seconds, millis] = projectTime(datetime)
+
+            document.title = ''
+                + hours
+                + ':'
+                + (minutes + '').padStart(2, '0')
+                + ':'
+                + (seconds + '').padStart(2, '0')
+                + '.'
+                + (millis + '').padEnd(3, '0')
+        } else {
+            document.title = 'Timer'
+        }
+
+        setTimePassed(datetime)
     })
     
     useEffect(() => {
