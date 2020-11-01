@@ -48,7 +48,7 @@ const loadStorage = (version = 0) => {
     
     let state
     try {
-        state = JSON.parse(localStorage.getItem(stateVersion.name))
+        state = JSON.parse(localStorage.getItem(stateVersion.name) || '')
         return state
     } catch (e) {
         state = loadStorage(version + 1)
