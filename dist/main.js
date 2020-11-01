@@ -7,6 +7,15 @@ import {
     useCallback
 } from 'https://unpkg.com/htm/preact/standalone.module.js'
 
+const prefetch = [
+    'https://img.icons8.com/ios-filled/100/555555/pause.png',
+    'https://img.icons8.com/ios-filled/100/555555/play.png',
+    'https://img.icons8.com/ios-filled/25/555555/stop.png',
+    'https://img.icons8.com/small/25/555555/save.png',
+    'https://img.icons8.com/small/32/555555/delete-forever.png',
+].map(imageSrc => new Image().src = imageSrc)
+
+
 const STORAGE_NAMESPACE_VERSIONS = [
     {
         // State :: [Duration]
@@ -28,14 +37,6 @@ const STORAGE_NAMESPACE_VERSIONS = [
 
 // The storage namespace is the most recent version
 const STORAGE_NAMESPACE = STORAGE_NAMESPACE_VERSIONS[0].name
-
-const prefetch = [
-    'https://img.icons8.com/ios-filled/100/555555/pause.png',
-    'https://img.icons8.com/ios-filled/100/555555/play.png',
-    'https://img.icons8.com/ios-filled/25/555555/stop.png',
-    'https://img.icons8.com/small/25/555555/save.png',
-    'https://img.icons8.com/small/32/555555/delete-forever.png',
-].map(imageSrc => new Image().src = imageSrc)
 
 const loadStorage = (version = 0) => {
     if (version >= STORAGE_NAMESPACE_VERSIONS.length) {
@@ -62,6 +63,11 @@ const loadStorage = (version = 0) => {
         }
     }
 }
+
+const saveListInitialState = loadStorage().map(o => ({
+    date: new Date(o.date),
+    duration: new Date(o.duration),
+}))
 
 const useLocalStorage = (object) => {
     useEffect(() => {
@@ -96,6 +102,10 @@ const useTimer = () => {
         return timestamps.length % 2 === 1
     }
 
+    const getStartingDate = () => {
+        return timestamps[0]
+    }
+
     const getCurrentValue = useCallback(() => {
         let timePassed = 0
         let intervals = timestamps
@@ -111,28 +121,15 @@ const useTimer = () => {
         return new Date(timePassed)
     })
 
-    return [toggle, reset, isRunning, getCurrentValue]
+    return [toggle, reset, isRunning, getCurrentValue, getStartingDate]
 }
-
-const saveListInitialState = loadStorage().map(o => ({
-    date: new Date(o.date),
-    duration: new Date(o.duration),
-}))
 
 const useSaveList = () => {
     const [savedList, setSavedList] = useState(saveListInitialState)
     useLocalStorage(savedList)
 
-    const add = duration => {
-        setSavedList(
-            [
-                ...savedList, 
-                { 
-                    date: new Date(), 
-                    duration 
-                }
-            ]
-        )
+    const add = (duration, date = new Date()) => {
+        setSavedList([...savedList, { date, duration }])
     }
 
     const remove = index => {
@@ -209,7 +206,8 @@ const TimeFace = ({ datetime }) => {
 const App = () => {
     
     const [timePassed, setTimePassed] = useState(new Date(0))
-    const [toggleTimer, resetTimer, isTimerRunning, getTimerCurrentValue] = useTimer()
+    const [toggleTimer, resetTimer, isTimerRunning, getTimerCurrentValue, getStartingDate]
+         = useTimer()
     const [SaveList, addSaved] = useSaveList()
 
     const updateTimePassed = useCallback(() => {
@@ -258,7 +256,7 @@ const App = () => {
                 <button class="small" onClick=${resetTimer}>
                     <img src="https://img.icons8.com/ios-filled/50/555555/stop.png"/>
                 </button>
-                <button class="small" onClick=${() => addSaved(timePassed)}>
+                <button class="small" onClick=${() => addSaved(timePassed, getStartingDate())}>
                     <img src="https://img.icons8.com/small/50/555555/save.png"/>
                 </button>
             </div>
