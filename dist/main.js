@@ -7,7 +7,27 @@ import {
     useCallback
 } from 'https://unpkg.com/htm/preact/standalone.module.js'
 
-const STORAGE_NAMESPACE = 'aziis98/timer@1'
+const STORAGE_NAMESPACE_VERSIONS = [
+    {
+        // State :: [Duration]
+        name: 'aziis98/timer@1',
+        initial: [],
+    },
+    {
+        // State :: [{ date: Date, duration: Duration }]
+        name: 'aziis98/timer@2',
+        initial: [],
+        migrate: previousState => {
+            return previousState.map(duration => ({
+                date: new Date(),
+                duration, 
+            }))
+        }
+    }
+].reverse()
+
+// The storage namespace is the most recent version
+const STORAGE_NAMESPACE = STORAGE_NAMESPACE_VERSIONS[0].name
 
 const prefetch = [
     'https://img.icons8.com/ios-filled/100/555555/pause.png',
@@ -17,24 +37,52 @@ const prefetch = [
     'https://img.icons8.com/small/32/555555/delete-forever.png',
 ].map(imageSrc => new Image().src = imageSrc)
 
-const loadStorage = (storage, initial = null) => {
+const loadStorage = (version = 0) => {
+    if (version >= STORAGE_NAMESPACE_VERSIONS.length) {
+        return null;
+    }
+
+    console.log(`Loading from version: ${STORAGE_NAMESPACE_VERSIONS[version].name}`)
+    
+    const stateVersion = STORAGE_NAMESPACE_VERSIONS[version]
+    
+    let state
     try {
-        return JSON.parse(storage.getItem(STORAGE_NAMESPACE)) || initial
+        state = JSON.parse(localStorage.getItem(stateVersion.name))
+        return state
     } catch (e) {
-        return initial
+        state = loadStorage(version + 1)
+
+        if (state) {
+            console.log(`Applying migration to version: ${STORAGE_NAMESPACE_VERSIONS[version].name}`)
+            return stateVersion.migrate(state)
+        }
+        else {
+            return STORAGE_NAMESPACE_VERSIONS[version].initial
+        }
     }
 }
 
-const useStorageState = (storage, object) => {
+const useLocalStorage = (object) => {
     useEffect(() => {
-        storage.setItem(STORAGE_NAMESPACE, JSON.stringify(object))
+        localStorage.setItem(STORAGE_NAMESPACE, JSON.stringify(object))
     }, [ object ])
 }
 
 const useTimer = () => {
-    const initial = loadStorage(sessionStorage, []).map(d => new Date(d))
+    let initial
+    try {
+        initial = JSON.parse(sessionStorage.getItem('aziis98/timer'))
+            .map(d => new Date(d))
+    } catch (e) {
+        initial = []
+    }
+
     const [timestamps, setTimestamps] = useState(initial)
-    useStorageState(sessionStorage, timestamps)
+
+    useEffect(() => {
+        sessionStorage.setItem('aziis98/timer', JSON.stringify(timestamps))
+    }, [ timestamps ])
 
     const toggle = () => {
         setTimestamps([...timestamps, new Date()])
@@ -66,14 +114,24 @@ const useTimer = () => {
     return [toggle, reset, isRunning, getCurrentValue]
 }
 
-const useSaveList = () => {
-    const initial = loadStorage(localStorage, []).map(d => new Date(d))
-    const [savedList, setSavedList] = useState(initial)
-    useStorageState(localStorage, savedList)
+const saveListInitialState = loadStorage().map(o => ({
+    date: new Date(o.date),
+    duration: new Date(o.duration),
+}))
 
-    const add = datetime => {
+const useSaveList = () => {
+    const [savedList, setSavedList] = useState(saveListInitialState)
+    useLocalStorage(savedList)
+
+    const add = duration => {
         setSavedList(
-            [...savedList, datetime]
+            [
+                ...savedList, 
+                { 
+                    date: new Date(), 
+                    duration 
+                }
+            ]
         )
     }
 
@@ -85,11 +143,22 @@ const useSaveList = () => {
         html`
             <div class="saved-list flex-v">
                 ${savedList.map((item, index) => {
+
+                    const dateString = ''
+                        + (item.date.getDate() + '').padStart(2, '0')
+                        + '/'
+                        + (item.date.getMonth() + 1 + '').padStart(2, '0')
+                        + '/'
+                        + item.date.getFullYear()
+
                     return html`
                         <div class="save-item">
                             <div class="flex-h">
+                                <div class="date">
+                                    ${dateString}
+                                </div>
                                 <div class="clock small">
-                                    <${TimeFace} datetime=${item} />
+                                    <${TimeFace} datetime=${item.duration} />
                                 </div>
                                 <button class="small" onClick=${() => remove(index)}>
                                     <img src="https://img.icons8.com/small/32/555555/delete-forever.png"/>
@@ -122,11 +191,11 @@ const TimeFace = ({ datetime }) => {
         <span class="hours">
             ${hours}
         </span>
-        :
+        <div class="colon">:</div>
         <span class="minutes">
             ${(minutes + '').padStart(2, '0')}
         </span>
-        :
+        <div class="colon">:</div>
         <span class="seconds">
             ${(seconds + '').padStart(2, '0')}
         </span>

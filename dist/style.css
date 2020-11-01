@@ -40,6 +40,11 @@ html, body {
 .clock > * {
     position: relative;
 }
+.clock .colon {
+    display: inline-block;
+    transform: translate(0, -0.075em);
+}
+
 .clock:not(.small) *::before {
     position: absolute;
     bottom: 95%;
@@ -111,6 +116,13 @@ button.small img {
 .saved-list {
     color: #444;
     flex-direction: column-reverse;
+}
+
+.save-item .date {
+    width: 11ch; 
+    text-align: right; 
+    padding-right: 0.5rem;
+    transform: translate(0, 1px);
 }
 
 .save-item button {
